@@ -585,6 +585,15 @@ exports.updateOrder =
 
       await order.save();
 
+      const io = req.app.get("io");
+
+if(io){
+  io.emit("newOrderForRiders", {
+    message:"New delivery request available",
+    order
+  });
+}
+
       const updated =
         await Order.findById(
           order._id
