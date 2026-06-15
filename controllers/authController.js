@@ -42,7 +42,13 @@ function cleanUser(user){
     gender:user.gender,
     dob:user.dob,
     phoneVerified:user.phoneVerified,
-    profileCompleted:user.profileCompleted
+    profileCompleted:user.profileCompleted,
+
+    referralCode:user.referralCode,
+    referredBy:user.referredBy,
+    referralCredits:user.referralCredits,
+    successfulReferrals:user.successfulReferrals,
+    firstOrderCompleted:user.firstOrderCompleted
   };
 }
 
