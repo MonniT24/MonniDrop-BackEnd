@@ -155,6 +155,37 @@ exports.getMe =
         });
       }
 
+      if(!user.referralCode){
+
+        let generatedReferralCode =
+          "";
+
+        let codeExists =
+          true;
+
+        while(codeExists){
+
+          generatedReferralCode =
+            `MBSWIFT-${Math.random()
+              .toString(36)
+              .substring(2,7)
+              .toUpperCase()}`;
+
+          const existingCode =
+            await User.findOne({
+              referralCode:generatedReferralCode
+            });
+
+          codeExists =
+            Boolean(existingCode);
+        }
+
+        user.referralCode =
+          generatedReferralCode;
+
+        await user.save();
+      }
+
       res.json(
         user
       );
