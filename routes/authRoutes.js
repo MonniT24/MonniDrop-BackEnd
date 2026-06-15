@@ -17,7 +17,7 @@ const {
   verifyForgotPasswordOtp,
   resetPassword,
   verifyAdminLoginOtp,
-  registerRider,
+  registerRider
 } = require("../controllers/authController");
 
 // REGISTER OTP

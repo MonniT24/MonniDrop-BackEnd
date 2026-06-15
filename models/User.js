@@ -86,6 +86,32 @@ const userSchema =
         default:"customer"
       },
 
+      referralCode:{
+        type:String,
+        unique:true,
+        sparse:true
+      },
+
+      referredBy:{
+        type:String,
+        default:""
+      },
+
+      referralCredits:{
+        type:Number,
+        default:0
+      },
+
+      successfulReferrals:{
+        type:Number,
+        default:0
+      },
+
+      firstOrderCompleted:{
+        type:Boolean,
+        default:false
+      },
+
       profileImage:{
         type:String,
         default:""

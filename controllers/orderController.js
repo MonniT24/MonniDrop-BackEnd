@@ -874,27 +874,64 @@ exports.completeDeliveryWithCode =
         order.paymentMethod
       );
 
-      if(
-        order.paymentMethod === "cash"
-      ){
+     if(
+  order.paymentMethod === "cash"
+){
 
-        order.paymentStatus =
-          "paid";
+  order.paymentStatus =
+    "paid";
 
-        order.isPaid =
-          true;
+  order.isPaid =
+    true;
 
-        order.paidAt =
-          new Date();
+  order.paidAt =
+    new Date();
 
-        order.cashCollectedByRider =
-          true;
+  order.cashCollectedByRider =
+    true;
 
-        order.cashCollectedAt =
-          new Date();
+  order.cashCollectedAt =
+    new Date();
+}
+
+if(order.customer){
+
+  const customer =
+    await User.findById(
+      order.customer
+    );
+
+  if(
+    customer &&
+    !customer.firstOrderCompleted
+  ){
+
+    customer.firstOrderCompleted =
+      true;
+
+    if(customer.referredBy){
+
+      const referrer =
+        await User.findOne({
+          referralCode:
+            customer.referredBy
+        });
+
+      if(referrer){
+
+        referrer.referralCredits += 5;
+
+        referrer.successfulReferrals += 1;
+
+        await referrer.save();
       }
+    }
 
-      await order.save();
+    await customer.save();
+  }
+}
+
+await order.save();
 
       const updated =
         await Order.findById(
