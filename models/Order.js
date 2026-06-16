@@ -82,15 +82,40 @@ const orderSchema =
         default:0
       },
 
-      deliveryTime:{
-        type:String,
-        default:""
-      },
+deliveryTime:{
+  type:String,
+  default:""
+},
 
-      total:{
-        type:Number,
-        default:0
-      },
+riderArrivedAtPickup:{
+  type:Boolean,
+  default:false
+},
+
+pickupWaitingStartedAt:{
+  type:Date,
+  default:null
+},
+
+pickupWaitingEndedAt:{
+  type:Date,
+  default:null
+},
+
+pickupWaitingMinutes:{
+  type:Number,
+  default:0
+},
+
+pickupWaitingFee:{
+  type:Number,
+  default:0
+},
+
+total:{
+  type:Number,
+  default:0
+},
 
       // PAYMENT
 

@@ -538,6 +538,96 @@ exports.updateOrder =
           req.user._id;
       }
 
+      if(
+        req.user.role === "rider" &&
+        req.body.riderArrivedAtPickup === true
+      ){
+
+        if(
+          !order.rider ||
+          String(order.rider) !== String(req.user._id)
+        ){
+
+          return res.status(403)
+          .json({
+            message:"You are not assigned to this order"
+          });
+        }
+
+        if(
+          order.status !== "accepted"
+        ){
+
+          return res.status(400)
+          .json({
+            message:"You can only mark arrival after accepting the order"
+          });
+        }
+
+        order.riderArrivedAtPickup =
+          true;
+
+        order.pickupWaitingStartedAt =
+          order.pickupWaitingStartedAt ||
+          new Date();
+      }
+
+      if(
+        req.user.role === "rider" &&
+        req.body.status === "picked"
+      ){
+
+        if(
+          order.pickupWaitingStartedAt &&
+          !order.pickupWaitingEndedAt
+        ){
+
+          const waitingEndedAt =
+            new Date();
+
+          const waitingMinutes =
+            Math.max(
+              0,
+              Math.ceil(
+                (
+                  waitingEndedAt.getTime() -
+                  new Date(order.pickupWaitingStartedAt).getTime()
+                ) / 60000
+              )
+            );
+
+          const freeMinutes =
+            5;
+
+          const chargeableMinutes =
+            Math.max(
+              0,
+              waitingMinutes - freeMinutes
+            );
+
+          const waitingFee =
+            chargeableMinutes > 0
+            ? Math.ceil(chargeableMinutes / 5) * 1
+            : 0;
+
+          order.pickupWaitingEndedAt =
+            waitingEndedAt;
+
+          order.pickupWaitingMinutes =
+            waitingMinutes;
+
+          order.pickupWaitingFee =
+            waitingFee;
+
+          if(waitingFee > 0){
+
+            order.total =
+              Number(order.total || 0) +
+              waitingFee;
+          }
+        }
+      }
+
       if(req.body.status === "cancelled"){
 
         order.cancelCount += 1;
