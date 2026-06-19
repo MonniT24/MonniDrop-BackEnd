@@ -919,12 +919,6 @@ exports.completeDeliveryWithCode =
         });
       }
 
-      const fileBase64 =
-        req.file.buffer.toString("base64");
-
-      const fileData =
-        `data:${req.file.mimetype};base64,${fileBase64}`;
-
       order.deliveryLatitude =
         Number(deliveryLatitude);
 
