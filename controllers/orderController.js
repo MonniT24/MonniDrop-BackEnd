@@ -903,14 +903,6 @@ exports.completeDeliveryWithCode =
         });
       }
 
-      if(!req.file){
-
-        return res.status(400)
-        .json({
-          message:"Delivery photo is required"
-        });
-      }
-
       const {
         deliveryLatitude,
         deliveryLongitude
@@ -932,17 +924,6 @@ exports.completeDeliveryWithCode =
 
       const fileData =
         `data:${req.file.mimetype};base64,${fileBase64}`;
-
-      const uploadedDeliveryPhoto =
-        await cloudinary.uploader.upload(
-          fileData,
-          {
-            folder:"mbswift_delivery_evidence"
-          }
-        );
-
-      order.deliveryPhoto =
-        uploadedDeliveryPhoto.secure_url;
 
       order.deliveryLatitude =
         Number(deliveryLatitude);
